@@ -7,11 +7,8 @@ public class GridController : MonoBehaviour
     #region Members
 
     [SerializeField] private Vector2 _gridSize;
-    /// <summary>
-    /// Start position of the grid 0, 0
-    /// </summary>
-    [SerializeField] private Vector2 _startPosition;
     [SerializeField] private int _cellBlockSize;
+    [SerializeField] private Vector2 _startPosition;
     [SerializeField] private GameObject _floorBlock;
     /// <summary>
     /// Prefab used for creating a single floor tile from multiple
@@ -26,7 +23,7 @@ public class GridController : MonoBehaviour
     private void Awake()
     {
         CreateGrid();
-        SetPlane();
+        SetPlane(_gridSize, _startPosition);
     }
     #endregion
     #region Methods
@@ -36,24 +33,26 @@ public class GridController : MonoBehaviour
     private void CreateGrid()
     {
         _cellList = new List<CellBlock>();
-        for (int i = (int)_startPosition.x; i < _gridSize.x + _startPosition.x; i++)
+        for (int i = 0; i < _gridSize.x ; i++)
         {
-            for (int j = (int)_startPosition.y; j < _gridSize.y + _startPosition.y; j++)
+            for (int j = 0; j < _gridSize.y ; j++)
             {
-                CellBlock _tempCellBlock = new CellBlock(i-(int)_startPosition.x,j - (int)_startPosition.y);
-                _tempCellBlock.Floor = Instantiate(_floorBlock, new Vector3(i * _cellBlockSize, .1f, j * _cellBlockSize), new Quaternion(0f, 0f, 0f, 0f));
-                _tempCellBlock.Floor.name = "Floor X:" + (i - (int)_startPosition.x).ToString() + " Y: " + (j - (int)_startPosition.y).ToString();
+                CellBlock _tempCellBlock = new CellBlock(i-(int)0,j - (int)0);
+                _tempCellBlock.Floor = Instantiate(_floorBlock, new Vector3(i * _cellBlockSize, .1f, j * _cellBlockSize)+ new Vector3(_startPosition.x,0f,_startPosition.y), new Quaternion(0f, 0f, 0f, 0f));
+                _tempCellBlock.Floor.name = "Floor X:" + (i - 0).ToString() + " Y: " + (j - 0).ToString();
                 _cellList.Add(_tempCellBlock);
             }
         }
     }
+
     /// <summary>
     /// Set's the plane to the size of the grid
     /// </summary>
-    private void SetPlane()
+    private void SetPlane(Vector2 gridsize, Vector2 startPosition)
     {
-        _roomFloorPrefab.transform.position = new Vector3(_gridSize.x / 2 - 0.5f, _roomFloorPrefab.transform.position.y, _gridSize.y / 2 - 0.5f);
-        _roomFloorPrefab.transform.localScale = new Vector3(_gridSize.x / 10, _roomFloorPrefab.transform.localScale.y, _gridSize.y / 10);
+        _roomFloorPrefab.transform.position = new Vector3(gridsize.x/2f - 0.5f, _roomFloorPrefab.transform.position.y, gridsize.y / 2f - 0.5f) + new Vector3(_startPosition.x,0f,_startPosition.y);
+        // _roomFloorPrefab.transform.position = new Vector3(startPosition.x / 2 - 0.5f, _roomFloorPrefab.transform.position.y, startPosition.y / 2 - 0.5f);
+        _roomFloorPrefab.transform.localScale = new Vector3(gridsize.x / 10, _roomFloorPrefab.transform.localScale.y, gridsize.y / 10);
     }
     #endregion
 }
