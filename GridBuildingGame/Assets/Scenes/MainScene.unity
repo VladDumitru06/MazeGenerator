@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 465273501}
   - component: {fileID: 465273500}
   - component: {fileID: 465273499}
+  - component: {fileID: 465273502}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -296,6 +297,20 @@ Transform:
   m_Father: {fileID: 699151069}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &465273502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 465273498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6b22313fffa41346822814b0e9055e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseSensitivity: 500
+  playerBody: {fileID: 699151069}
 --- !u!1001 &498896597
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -311,7 +326,7 @@ PrefabInstance:
     - target: {fileID: 2152599481085346190, guid: ea5396dd336edcb46be37b3579abf33f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2152599481085346190, guid: ea5396dd336edcb46be37b3579abf33f,
         type: 3}
@@ -363,11 +378,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoomFloorPrefab
       objectReference: {fileID: 0}
-    - target: {fileID: 2152599481085346194, guid: ea5396dd336edcb46be37b3579abf33f,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea5396dd336edcb46be37b3579abf33f, type: 3}
 --- !u!1 &610162582
@@ -399,9 +409,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 228514c8e69380f4ca0fb1bfc38f607f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridSize: {x: 14, y: 22}
-  _startPosition: {x: 0, y: 0}
+  _gridSize: {x: 10, y: 10}
   _cellBlockSize: 1
+  _startPosition: {x: 10, y: 10}
   _floorBlock: {fileID: 4934219274837206895, guid: 1657e96abd505d04a81052ba826eb855,
     type: 3}
   _roomFloorPrefab: {fileID: 1600064525}
@@ -431,8 +441,6 @@ GameObject:
   - component: {fileID: 699151070}
   - component: {fileID: 699151071}
   - component: {fileID: 699151073}
-  - component: {fileID: 699151068}
-  - component: {fileID: 699151072}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -440,22 +448,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!54 &699151068
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 699151067}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 80
-  m_CollisionDetection: 0
 --- !u!4 &699151069
 Transform:
   m_ObjectHideFlags: 0
@@ -464,7 +456,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 699151067}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -5.61}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1667285040}
@@ -485,11 +477,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bccffb224fb92b4082da6f3b258d8d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterController: {fileID: 699151073}
-  _rb: {fileID: 699151068}
-  _groundedCollider: {fileID: 862210214}
-  speed: 5
-  jumpforce: 5
+  controller: {fileID: 699151073}
+  speed: 20
+  gravity: -19.62
+  jumpHeight: 3
+  groundCheck: {fileID: 862210215}
+  groundDistance: 0.4
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &699151071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529,20 +525,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 465273500}
---- !u!114 &699151072
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 699151067}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6b22313fffa41346822814b0e9055e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mouseSensitivity: 100
-  playerBody: {fileID: 699151069}
 --- !u!143 &699151073
 CharacterController:
   m_ObjectHideFlags: 0
@@ -570,7 +552,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 862210215}
-  - component: {fileID: 862210214}
   m_Layer: 0
   m_Name: GroundCheck
   m_TagString: Untagged
@@ -578,19 +559,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!65 &862210214
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 862210213}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.47288585, y: 1, z: 0.5262657}
-  m_Center: {x: -0.018179536, y: 0, z: -0.020705432}
 --- !u!4 &862210215
 Transform:
   m_ObjectHideFlags: 0
@@ -599,7 +567,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 862210213}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.859, z: 0}
+  m_LocalPosition: {x: 0, y: -1.83, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 699151069}
@@ -703,7 +671,7 @@ GameObject:
   - component: {fileID: 1708905758}
   - component: {fileID: 1708905757}
   - component: {fileID: 1708905761}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}

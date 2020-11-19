@@ -50,7 +50,8 @@ public class GridController : MonoBehaviour
     /// </summary>
     private void SetPlane(Vector2 gridsize, Vector2 startPosition)
     {
-        _roomFloorPrefab.transform.position = new Vector3(startPosition.x / 2 - 0.5f, _roomFloorPrefab.transform.position.y, startPosition.y / 2 - 0.5f);
+        _roomFloorPrefab.transform.position = new Vector3(gridsize.x/2f - 0.5f, _roomFloorPrefab.transform.position.y, gridsize.y / 2f - 0.5f) + new Vector3(_startPosition.x,0f,_startPosition.y);
+        // _roomFloorPrefab.transform.position = new Vector3(startPosition.x / 2 - 0.5f, _roomFloorPrefab.transform.position.y, startPosition.y / 2 - 0.5f);
         _roomFloorPrefab.transform.localScale = new Vector3(gridsize.x / 10, _roomFloorPrefab.transform.localScale.y, gridsize.y / 10);
     }
     #endregion
