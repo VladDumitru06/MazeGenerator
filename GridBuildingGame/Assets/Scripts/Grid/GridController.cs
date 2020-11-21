@@ -5,8 +5,7 @@ using UnityEngine;
 public class GridController : MonoBehaviour
 {
     #region Members
-
-    [SerializeField] private Vector2 _gridSize;
+    [SerializeField] private Vector2 _endPosition;
     [SerializeField] private int _cellBlockSize;
     [SerializeField] private Vector2 _startPosition;
     [SerializeField] private GameObject _floorBlock;
@@ -20,27 +19,37 @@ public class GridController : MonoBehaviour
     private List<CellBlock> _cellList;
     #endregion
     #region Unity Methods
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            if (SelectedCell.CreatePlane())
+            {
+                CreateGrid(SelectedCell.firstCell, SelectedCell.secondCell,Color.white,0.2f);
+            }
+        }
+    }
     private void Awake()
     {
-        CreateGrid();
-        SetPlane(_gridSize, _startPosition);
+        CreateGrid(_startPosition,_endPosition,Color.red,0.1f);
+        //SetPlane(_gridSize, _startPosition);
     }
     #endregion
     #region Methods
     /// <summary>
     /// Instantiates each Cell Block at it's respective positions
     /// </summary>
-    private void CreateGrid()
+    public void CreateGrid(Vector2 startPosition, Vector2 endPosition,Color color,float height)
     {
         _cellList = new List<CellBlock>();
-        for (int i = 0; i < _gridSize.x ; i++)
+        for (int i = 0; i <= endPosition.x - startPosition.x ; i++)
         {
-            for (int j = 0; j < _gridSize.y ; j++)
+            for (int j = 0; j <= endPosition.y - startPosition.y; j++)
             {
-                CellBlock _tempCellBlock = new CellBlock(i-(int)0,j - (int)0);
-                _tempCellBlock.Floor = Instantiate(_floorBlock, new Vector3(i * _cellBlockSize, .1f, j * _cellBlockSize)+ new Vector3(_startPosition.x,0f,_startPosition.y), new Quaternion(0f, 0f, 0f, 0f));
-                _tempCellBlock.Floor.name = "Floor X:" + (i - 0).ToString() + " Y: " + (j - 0).ToString();
-                _cellList.Add(_tempCellBlock);
+                GameObject Floor = Instantiate(_floorBlock, new Vector3(i * _cellBlockSize, height, j * _cellBlockSize)+ new Vector3(startPosition.x,0f, startPosition.y), new Quaternion(0f, 0f, 0f, 0f));
+                Floor.name = "Floor X:" + (i - 0).ToString() + " Y: " + (j - 0).ToString();
+                Floor.GetComponent<MeshRenderer>().material.color = color;
+                //_cellList.Add(_tempCellBlock);
             }
         }
     }
@@ -51,7 +60,6 @@ public class GridController : MonoBehaviour
     private void SetPlane(Vector2 gridsize, Vector2 startPosition)
     {
         _roomFloorPrefab.transform.position = new Vector3(gridsize.x/2f - 0.5f, _roomFloorPrefab.transform.position.y, gridsize.y / 2f - 0.5f) + new Vector3(_startPosition.x,0f,_startPosition.y);
-        // _roomFloorPrefab.transform.position = new Vector3(startPosition.x / 2 - 0.5f, _roomFloorPrefab.transform.position.y, startPosition.y / 2 - 0.5f);
         _roomFloorPrefab.transform.localScale = new Vector3(gridsize.x / 10, _roomFloorPrefab.transform.localScale.y, gridsize.y / 10);
     }
     #endregion

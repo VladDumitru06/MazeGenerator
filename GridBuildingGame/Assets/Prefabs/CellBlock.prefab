@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4934219274837206880}
   - component: {fileID: 4934219274837206881}
   - component: {fileID: 4934219274837206894}
+  - component: {fileID: 2950979404985807432}
   m_Layer: 0
   m_Name: CellBlock
   m_TagString: Untagged
@@ -94,3 +95,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2950979404985807432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4934219274837206895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbe36b75e92ecb44c9a8aa970938e421, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  x: 0
+  y: 0
+  Floor: {fileID: 0}
+  NorthWall: {fileID: 0}
+  SouthWall: {fileID: 0}
+  EastWall: {fileID: 0}
+  WestWall: {fileID: 0}
