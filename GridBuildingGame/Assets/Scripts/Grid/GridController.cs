@@ -8,7 +8,11 @@ public class GridController : MonoBehaviour
     [SerializeField] private Vector2 _endPosition;
     [SerializeField] private int _cellBlockSize;
     [SerializeField] private Vector2 _startPosition;
-    [SerializeField] private GameObject _floorBlock;
+    [SerializeField] private GameObject _cellBlockPrefab;
+
+    private bool isCellSelected = false;
+    private CellBlock FirstSelectedCell;
+    private CellBlock SecondSelectedCell;
     /// <summary>
     /// Prefab used for creating a single floor tile from multiple
     /// </summary>
@@ -23,9 +27,9 @@ public class GridController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            if (SelectedCell.CreatePlane())
+            if (FirstSelectedCell != SecondSelectedCell)
             {
-                CreateGrid(SelectedCell.firstCell, SelectedCell.secondCell,Color.white,0.2f);
+                CreateGridFromSelectedCells(FirstSelectedCell, SecondSelectedCell);
             }
         }
     }
@@ -37,7 +41,7 @@ public class GridController : MonoBehaviour
     #endregion
     #region Methods
     /// <summary>
-    /// Instantiates each Cell Block at it's respective positions
+    /// Instantiates each Cell Block at it's respective positions and adds them to _cellList
     /// </summary>
     public void CreateGrid(Vector2 startPosition, Vector2 endPosition,Color color,float height)
     {
@@ -46,14 +50,67 @@ public class GridController : MonoBehaviour
         {
             for (int j = 0; j <= endPosition.y - startPosition.y; j++)
             {
-                GameObject Floor = Instantiate(_floorBlock, new Vector3(i * _cellBlockSize, height, j * _cellBlockSize)+ new Vector3(startPosition.x,0f, startPosition.y), new Quaternion(0f, 0f, 0f, 0f));
-                Floor.name = "Floor X:" + (i - 0).ToString() + " Y: " + (j - 0).ToString();
-                Floor.GetComponent<MeshRenderer>().material.color = color;
-                //_cellList.Add(_tempCellBlock);
+
+                GameObject _TempGOCellBlock = Instantiate(_cellBlockPrefab, new Vector3(i * _cellBlockSize, height, j * _cellBlockSize)+ new Vector3(startPosition.x,0f, startPosition.y), new Quaternion(0f, 0f, 0f, 0f));
+                CellBlock _tempCellBlock = _TempGOCellBlock.GetComponent<CellBlock>();
+                _tempCellBlock.Floor = _TempGOCellBlock;
+                _tempCellBlock.Floor.name = "Floor X:" + (i - 0).ToString() + " Y: " + (j - 0).ToString();
+                _tempCellBlock.Floor.GetComponent<MeshRenderer>().material.color = color;
+                _tempCellBlock.gridController = this;
+                _cellList.Add(_tempCellBlock);
             }
         }
     }
+    public void SelectCell(CellBlock Cell)
+    {
+        if (!isCellSelected)
+        {
+            FirstSelectedCell = Cell;
+            SecondSelectedCell = Cell;
+            isCellSelected = true;
+        }
+        else
+        {
+            SecondSelectedCell = Cell;
+            isCellSelected = false;
+        }
 
+    }
+    private void CreateGridFromSelectedCells(CellBlock firstCell, CellBlock secondCell)
+    {
+        if (firstCell.Position.x < secondCell.Position.x && firstCell.Position.y < secondCell.Position.y)
+        {
+            CreateGrid(firstCell.Position, secondCell.Position, Color.cyan, .11f);
+        }
+        if (firstCell.Position.x == secondCell.Position.x && firstCell.Position.y < secondCell.Position.y)
+        {
+            CreateGrid(new Vector2(firstCell.Position.x, firstCell.Position.y), new Vector2(secondCell.Position.x, secondCell.Position.y), Color.cyan, .11f);
+        }
+        if (firstCell.Position.x < secondCell.Position.x && firstCell.Position.y == secondCell.Position.y)
+        {
+            CreateGrid(new Vector2(firstCell.Position.x, firstCell.Position.y), new Vector2(secondCell.Position.x, secondCell.Position.y), Color.cyan, .11f);
+        }
+        if (firstCell.Position.x == secondCell.Position.x && firstCell.Position.y > secondCell.Position.y)
+        {
+            CreateGrid(new Vector2(firstCell.Position.x, secondCell.Position.y), new Vector2(secondCell.Position.x, firstCell.Position.y), Color.cyan, .11f);
+        }
+        if (firstCell.Position.x > secondCell.Position.x && firstCell.Position.y == secondCell.Position.y)
+        {
+            CreateGrid(new Vector2(secondCell.Position.x, firstCell.Position.y), new Vector2(firstCell.Position.x, secondCell.Position.y), Color.cyan, .11f);
+        }
+        if (firstCell.Position.x > secondCell.Position.x && firstCell.Position.y < secondCell.Position.y)
+        {
+            CreateGrid(new Vector2(secondCell.Position.x,firstCell.Position.y), new Vector2(firstCell.Position.x, secondCell.Position.y), Color.cyan, .11f);
+        }
+        if (firstCell.Position.x < secondCell.Position.x && firstCell.Position.y > secondCell.Position.y)
+        {
+            CreateGrid(new Vector2(firstCell.Position.x, secondCell.Position.y), new Vector2(secondCell.Position.x, firstCell.Position.y), Color.cyan, .11f);
+        }
+        if (firstCell.Position.x > secondCell.Position.x && firstCell.Position.y > secondCell.Position.y)
+        {
+            CreateGrid(new Vector2(secondCell.Position.x, secondCell.Position.y), new Vector2(firstCell.Position.x, firstCell.Position.y), Color.cyan, .11f);
+        }
+    }
     /// <summary>
     /// Set's the plane to the size of the grid
     /// </summary>

@@ -5,23 +5,24 @@ using UnityEngine;
 public class CellBlock : MonoBehaviour
 {
     #region Members
-    public float x, y;
+    public GridController gridController;
+    public Vector2 Position;
     public GameObject Floor, NorthWall, SouthWall, EastWall, WestWall;
+    public bool selected;
     #endregion
     #region Constructors
     #endregion
     #region UnityMethods
     private void Start()
     {
-        
-        x = transform.position.x;
-        y = transform.position.z;
+        selected = false;
+        Position.x = transform.position.x;
+        Position.y = transform.position.z;
     }
     private void OnMouseDown()
     {
         GetComponent<MeshRenderer>().material.color = Color.white;
-        SelectedCell.SelectCell(new Vector2(x, y));
-        Debug.Log("X " + x + " Y: " + y);
+        gridController.SelectCell(this);
     }
     #endregion
     #region Methods
